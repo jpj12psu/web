@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+<meta charset="UTF-8" />
+<title>Test Page Please Ignore</title>
+<style type="text/css">
+body {
+	color: white;
+	background-color: black;
+}
+#spinner {
+	aspect-ratio: 1;
+	min-width: 200px;
+	min-height: 200px;
+	width: 80%;
+	max-width: 1000px;
+	height: auto;
+	margin: auto;
+	display: block;
+}
+#spin {
+	position: absolute;
+	top: 10%;
+	left: 10%;
+	width: 10%;
+	height: 10%;
+	font-size: 48px;
+}
+</style>
+</head>
+<body>
+<canvas id="spinner" width="1000" height="1000"></canvas>
+<div id="form">
+	<form action="javascript:add_names();" method="GET">
+		<input id="namefont" type="hidden" value="48px sans" />
+		<label>Names: <textarea id="names" rows="10" cols="10">
+AJ
+Brett
+Chris
+Dave
+Jeff
+Jennifer
+Josh
+</textarea></label>
+		<input type="submit" value="Set" />
+	</form>
+	<input id="spin" type="submit" value="Spin!" onclick="javascript:start_spin();" />
+</div>
+<script language="javascript" type="text/javascript">
+var namefont = '';
+var names = [];
+var defaultcolors = ["red", "orange", "yellow", "green", "blue", "purple", "brown", "gold", "silver" ];
+var colors = defaultcolors;
+var start;
+var spintime = 5000; //ms
+var spinmove = 0;
+var previousrotation = 0;
+var rotation = 0;
+var result = undefined;
+var target = 0;
+
+var canvas = document.getElementById("spinner");
+var ctx = canvas.getContext("2d");
+var buffer = document.createElement("canvas");
+buffer.width = canvas.width;
+buffer.height = canvas.height;
+var btx = buffer.getContext("2d");
+
+
+function shuffleArray(array) {
+    for (var i = array.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+}
+
+function getRandomIntInclusive(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1) + min); // The maximum is inclusive and the minimum is inclusive
+}
+
+function updatewheel()
+{
+	btx.clearRect(0, 0, canvas.width, canvas.height);
+
+	btx.lineWidth = 2;
+	btx.font = namefont;
+	btx.textAlign = "center";
+	btx.textBaseline = "middle";
+	btx.strokeStyle = "black";
+
+	var cx = canvas.width/2;
+	var cy = canvas.height/2;
+	var r = Math.round(Math.min(cx, cy)*.9);
+
+	btx.fillStyle = "dimgrey";
+	btx.beginPath();
+	btx.arc(cx, cy, r, 0, Math.PI * 2, false);
+	btx.stroke();
+	btx.fill();
+	
+	var count = names.length;
+	var div = Math.PI * 2 / count;
+
+	for(var i = 0; i<count; i++)
+	{
+		var colorindex = i % colors.length;
+		btx.fillStyle = colors[colorindex];
+		btx.beginPath();
+		btx.arc(cx, cy, r, -(i-0.5) * div, -(i+0.5)*div, true);
+		btx.lineTo(cx, cy);
+		btx.closePath();
+		btx.stroke();
+		btx.fill();
+
+		btx.save();
+		btx.translate(cx,cy);
+		btx.rotate(-(i) * div);
+		btx.fillStyle = "black";
+		btx.fillText(names[i], r/2, 0);
+		btx.restore();
+	}
+
+	btx.fillStyle = "black";
+	btx.beginPath();
+	btx.arc(cx, cy, r*.05, 0, Math.PI * 2, false);
+	btx.fill();
+
+	rotation = 0;
+	draw_wheel();
+}
+
+function draw_wheel()
+{
+	var cx = canvas.width/2;
+	var cy = canvas.height/2;
+	var count = names.length;
+	var div = Math.PI * 2 / count;
+
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	ctx.drawImage(buffer, 0, 0);
+
+	ctx.save();
+	ctx.translate(cx,cy);
+	ctx.rotate(rotation * div);
+	ctx.translate(-cx,-cy);
+	ctx.drawImage(buffer, 0, 0);
+	ctx.restore();
+
+	// Pointer
+	ctx.beginPath();
+	ctx.moveTo(canvas.width - 100, cy);
+	ctx.lineTo(canvas.width, cy - 50);
+	ctx.lineTo(canvas.width, cy + 50);
+	ctx.stroke();
+	ctx.fill();
+}
+
+function add_names()
+{
+	namefont = document.getElementById("namefont").value;
+	var namelist = document.getElementById("names").value;
+	namelist = namelist.trim();
+	names = namelist.split(/\n/);
+	shuffleArray(names);
+	colors = defaultcolors;
+	updatewheel();
+}
+
+function spin(time)
+{
+	if(start == undefined){start = time};
+	var progress = (time - start)/(spintime);
+	var currentrot = spinmove * (1 - Math.cos(Math.PI * progress))/2;
+	rotation = previousrotation + currentrot;
+
+	if(progress >= 1){rotation = target;}
+
+	draw_wheel();
+	
+	if(progress < 1)
+	{
+		window.requestAnimationFrame(spin);
+	}
+}
+function start_spin()
+{
+	if(result != undefined)
+	{
+		names.splice(result, 1);
+		colors.splice(result, 1);
+		document.getElementById("names").textContent = names.join("\n");
+		updatewheel();
+	}
+
+	start = undefined;
+	var count = names.length;
+	var div = Math.PI * 2 / count;
+	result = getRandomIntInclusive(0, count-1);
+	var jitter = getRandomIntInclusive(-40, 40) / 100;
+	var basemove = getRandomIntInclusive(1, 5) * count;
+	spinmove = basemove - rotation + result + jitter;
+	previousrotation = rotation;
+	target = result + jitter;
+	window.requestAnimationFrame(spin);
+}
+
+add_names();
+</script>
+</body>
+</html>

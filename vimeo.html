@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+<meta charset="UTF-8" />
+<title>Test Page Please Ignore</title>
+<style type="text/css">
+body {
+	color: white;
+	background-color: black;
+}
+#form {
+	text-align: center;
+	white-space: nowrap;
+}
+#video {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	height: 100%;
+	width: 100%;
+}
+</style>
+</head>
+<body>
+<div id="form">
+	<form action="" method="GET">
+		<label>PSU Vimeo video ID: <input type="text" name="video" /></label>
+		<input type="submit" value="Load" />
+	</form>
+</div>
+<div id="vidbox"></div>
+<script language="javascript" type="text/javascript">
+	var params = new URLSearchParams(window.location.search);
+	var vid = params.get("video");
+
+	if(vid != null)
+	{
+		var url = "https://livestream.com/accounts/29165871/events/"+vid+"/player?width=1280&height=720&enableInfoAndActivity=true&defaultDrawer=feed&autoPlay=true&mute=false&dnt=true";
+		var frame = document.createElement("iframe");
+		frame.setAttribute("id", "video");
+		frame.setAttribute("src", url);
+		frame.setAttribute("allowfullscreen", "");
+		frame.setAttribute("frameborder", "0");
+		document.getElementById('vidbox').appendChild(frame);
+	}
+</script>
+</body>
+</html>
