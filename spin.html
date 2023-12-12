@@ -48,10 +48,31 @@ Josh
 	<input id="spin" type="submit" value="Spin!" onclick="javascript:start_spin();" />
 </div>
 <script language="javascript" type="text/javascript">
+
+function shuffleArray(array) {
+    for (var i = array.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+}
+
 var namefont = '';
 var names = [];
-var defaultcolors = ["red", "orange", "yellow", "green", "blue", "purple", "brown", "gold", "silver" ];
-var colors = defaultcolors;
+
+//var defaultcolors = ["red", "orange", "yellow", "green", "blue", "purple", "brown", "gold", "silver" ];
+var defaultcolors = [];
+var numcolors = 7;
+var huejump = 360/numcolors;
+for(var i = 0; i<numcolors; i++){
+	defaultcolors.push( 'hsl('+i*huejump+',100%,45%)' ); // bold
+	defaultcolors.push( 'hsl('+(i+.33)*huejump+',70%,60%)' ); // mild
+	//defaultcolors.push( 'hsl('+(i+.66)*huejump+',80%,75%)' ); // faded
+}
+//var colors = defaultcolors;
+var colors = shuffleArray(defaultcolors);
+
 var start;
 var spintime = 5000; //ms
 var spinmove = 0;
@@ -66,16 +87,6 @@ var buffer = document.createElement("canvas");
 buffer.width = canvas.width;
 buffer.height = canvas.height;
 var btx = buffer.getContext("2d");
-
-
-function shuffleArray(array) {
-    for (var i = array.length - 1; i > 0; i--) {
-        var j = Math.floor(Math.random() * (i + 1));
-        var temp = array[i];
-        array[i] = array[j];
-        array[j] = temp;
-    }
-}
 
 function getRandomIntInclusive(min, max) {
   min = Math.ceil(min);
