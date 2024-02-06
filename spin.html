@@ -39,7 +39,6 @@ Brett
 Chris
 Dave
 Gary
-Jeff
 Jennifer
 Joel
 Josh
@@ -52,12 +51,12 @@ Lee
 <script language="javascript" type="text/javascript">
 
 function shuffleArray(array) {
-    for (var i = array.length - 1; i > 0; i--) {
-        var j = Math.floor(Math.random() * (i + 1));
-        var temp = array[i];
-        array[i] = array[j];
-        array[j] = temp;
-    }
+	for (var i = array.length - 1; i > 0; i--) {
+		var j = Math.floor(Math.random() * (i + 1));
+		var temp = array[i];
+		array[i] = array[j];
+		array[j] = temp;
+	}
 }
 
 var namefont = '';
@@ -91,9 +90,9 @@ buffer.height = canvas.height;
 var btx = buffer.getContext("2d");
 
 function getRandomIntInclusive(min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1) + min); // The maximum is inclusive and the minimum is inclusive
+	min = Math.ceil(min);
+	max = Math.floor(max);
+	return Math.floor(Math.random() * (max - min + 1) + min); // The maximum is inclusive and the minimum is inclusive
 }
 
 function updatewheel()
@@ -115,7 +114,7 @@ function updatewheel()
 	btx.arc(cx, cy, r, 0, Math.PI * 2, false);
 	btx.stroke();
 	btx.fill();
-	
+
 	var count = names.length;
 	var div = Math.PI * 2 / count;
 
@@ -194,7 +193,7 @@ function spin(time)
 	if(progress >= 1){rotation = target;}
 
 	draw_wheel();
-	
+
 	if(progress < 1)
 	{
 		window.requestAnimationFrame(spin);
