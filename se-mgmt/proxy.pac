@@ -25,9 +25,7 @@ function FindProxyForURL(url, host)
 	if(
 		isInNet(host_ip, "10.129.250.0", "255.255.255.0") ||
 		isInNet(host_ip, "172.27.30.0", "255.255.254.0") ||
-		isInNet(host_ip, "10.139.8.0", "255.255.254.0") ||
-		isInNet(host_ip, "128.118.15.47", "255.255.255.255") ||
-		isInNet(host_ip, "128.118.15.48", "255.255.255.255")
+		isInNet(host_ip, "10.139.8.0", "255.255.254.0")
 	){ return "SOCKS localhost:8082"; }
 
 	// hy - 8081
