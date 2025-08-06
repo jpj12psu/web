@@ -23,12 +23,9 @@ function FindProxyForURL(url, host)
 		else { return "SOCKS localhost:8082"; }
 	}
 	if(
-		isInNet(host_ip, "172.25.24.64", "255.255.255.224") ||
 		isInNet(host_ip, "10.129.250.0", "255.255.255.0") ||
 		isInNet(host_ip, "172.27.30.0", "255.255.254.0") ||
 		isInNet(host_ip, "10.139.8.0", "255.255.254.0") ||
-		isInNet(host_ip, "10.139.18.0", "255.255.255.240") ||
-		isInNet(host_ip, "128.118.73.15", "255.255.255.255") ||
 		isInNet(host_ip, "128.118.15.47", "255.255.255.255") ||
 		isInNet(host_ip, "128.118.15.48", "255.255.255.255")
 	){ return "SOCKS localhost:8082"; }
@@ -41,7 +38,6 @@ function FindProxyForURL(url, host)
 		else { return "SOCKS localhost:8081"; }
 	}
 	if(
-		isInNet(host_ip, "10.131.6.32", "255.255.255.224") ||
 		isInNet(host_ip, "10.141.128.0", "255.255.255.0") ||
 		isInNet(host_ip, "10.141.132.0", "255.255.255.0")
 	){ return "SOCKS localhost:8081"; }
